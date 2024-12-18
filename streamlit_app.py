@@ -29,7 +29,7 @@ g.add((vulnerability, CYBERSEC.exploitedBy, threat))
 g.add((asset, CYBERSEC.exploitedBy, vulnerability))
 
 # Streamlit UI
-st.title("Takahashi Ontology Visualization")
+st.title("Takahashi Cloud Security Ontology Visualization")
 
 st.write("### Ontology initialized with instances and relationships.")
 
@@ -51,7 +51,7 @@ plt.figure(figsize=(8, 6))
 pos = nx.spring_layout(G)
 nx.draw(G, pos, with_labels=True, node_size=2000, font_size=12, font_weight="bold")
 nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['label'] for u, v, d in G.edges(data=True)})
-plt.title("Takahashi Ontology Visualization")
+plt.title("Takahashi Cloud Security Ontology Visualization")
 
 # Render the matplotlib figure in Streamlit
 buf = BytesIO()
