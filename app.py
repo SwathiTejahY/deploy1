@@ -1,4 +1,4 @@
-!pip install rdflib pandas networkx matplotlib
+
 from rdflib import Graph, Namespace, RDF, OWL, URIRef
 import pandas as pd
 import networkx as nx
