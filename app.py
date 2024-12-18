@@ -1,8 +1,3 @@
-# Cell start
-!pip install rdflib pandas networkx matplotlib
-# Cell end
-
-
 
 g = Graph()
 
