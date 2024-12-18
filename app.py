@@ -2,18 +2,7 @@
 !pip install rdflib pandas networkx matplotlib
 # Cell end
 
-# Cell start
-from rdflib import Graph, Namespace, RDF, OWL, URIRef
 
-import pandas as pd
-
-import networkx as nx
-
-import matplotlib.pyplot as plt
-# Cell end
-
-# Cell start
-# Initialize Ontology and Namespace
 
 g = Graph()
 
