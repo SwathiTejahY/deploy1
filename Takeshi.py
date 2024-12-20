@@ -28,8 +28,15 @@ g.add((threat, RDF.type, CYBERSEC.Threat))
 g.add((vulnerability, CYBERSEC.exploitedBy, threat))
 g.add((asset, CYBERSEC.exploitedBy, vulnerability))
 
-# Accuracy of the model (example value)
-takeshi_accuracy = 93.2  # Replace with dynamically computed or stored value
+# Metrics
+metrics = {
+    "Class": [0, 1],
+    "Precision": [0.58, 0.97],
+    "Recall": [1.00, 0.08],
+    "F1-Score": [0.73, 0.14],
+    "Support": [2532, 1977],
+}
+accuracy = 0.595
 
 # Streamlit UI
 st.title("Takeshi Takahashi Cloud Security Ontology Visualization")
@@ -45,9 +52,17 @@ df = pd.DataFrame(results, columns=["Subject", "Exploited By"])
 st.write("### Query Results")
 st.dataframe(df)
 
-# Display model accuracy
+# Display Accuracy
 if st.checkbox("Show Model Accuracy"):
-    st.write(f"Model Accuracy: {takeshi_accuracy}%")
+    st.write(f"Overall Accuracy: {accuracy:.3f} ({accuracy * 100:.2f}%)")
+
+# Display Detailed Metrics
+if st.checkbox("Show Detailed Metrics"):
+    metrics_df = pd.DataFrame(metrics)
+    st.write("### Detailed Metrics")
+    st.dataframe(metrics_df)
+    st.write("Macro Avg: Precision: 0.78, Recall: 0.54, F1-Score: 0.44")
+    st.write("Weighted Avg: Precision: 0.75, Recall: 0.59, F1-Score: 0.48")
 
 # Visualize the relationships using NetworkX
 G = nx.DiGraph()
@@ -64,5 +79,6 @@ plt.title("Takeshi Takahashi Cloud Security Ontology Visualization")
 buf = BytesIO()
 plt.savefig(buf, format="png")
 st.image(buf)
+
 
      
