@@ -5,7 +5,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # Streamlit App Title
-st.title(" CoCoOn Cloud Security Ontology")
+st.title(" CoCoOn Cloud Security Ontology Model")
 
 # Initialize the graph and define namespace
 g = Graph()
