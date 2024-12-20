@@ -45,16 +45,33 @@ for s, p, o in g.triples((None, COCOON.exploitedBy, None)):
     results.append((s.split("#")[-1], o.split("#")[-1]))
 
 # Convert to pandas DataFrame
-df = pd.DataFrame(results, columns=["Vulnerability", "Exploited By"])
+df = pd.DataFrame(results, columns=["Subject", "Exploited By"])
 st.write("---")
-st.write("### Vulnerabilities and the Threats Exploiting Them")
+st.write("### Query Results")
 st.dataframe(df)
+
+# Display Model Accuracy and Metrics
+st.write("### Show Model Accuracy")
+st.write("Overall Accuracy: 0.595 (59.50%)")
+
+st.write("### Show Detailed Metrics")
+st.write("#### Detailed Metrics")
+st.table(pd.DataFrame({
+    "Class": [0, 1],
+    "Precision": [0.58, 0.97],
+    "Recall": [1.0, 0.08],
+    "F1-Score": [0.73, 0.14],
+    "Support": [2532, 1977]
+}))
+st.write("#### Averages")
+st.write("Macro Avg: Precision: 0.78, Recall: 0.54, F1-Score: 0.44")
+st.write("Weighted Avg: Precision: 0.75, Recall: 0.59, F1-Score: 0.48")
 
 # Visualize Results as a Graph
 st.header("Ontology Graph Visualization")
 G = nx.DiGraph()
 for _, row in df.iterrows():
-    G.add_edge(row['Vulnerability'], row['Exploited By'], label='exploitedBy')
+    G.add_edge(row['Subject'], row['Exploited By'], label='exploitedBy')
 
 # Draw graph
 fig, ax = plt.subplots(figsize=(8, 6))
@@ -63,21 +80,10 @@ nx.draw(G, pos, with_labels=True, node_size=2000, font_size=12, font_weight="bol
 nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['label'] for u, v, d in G.edges(data=True)}, ax=ax)
 st.pyplot(fig)
 
-# Display Accuracy and Metrics
-st.header("Model Metrics")
-st.write("### Accuracy")
-st.write("The model achieves an accuracy of 91%.")
-st.write("### Metrics")
-st.write("| Metric         | Class 0 | Class 1 | Macro Avg | Weighted Avg |")
-st.write("|----------------|---------|---------|-----------|--------------|")
-st.write("| Precision      | 0.92    | 0.92    | 0.91      | 0.91         |")
-st.write("| Recall         | 0.92    | 0.92    | 0.91      | 0.91         |")
-st.write("| F1-Score       | 0.92    | 0.91    | 0.92      | 0.91         |")
-st.write("| Support        | 2532    | 1977    | 4509      | 4509         |")
-
 # Save Ontology to File
 st.header("Save Ontology")
 if st.button("Save Ontology as Turtle"):
     output_path = "cocoon_cloud_security_ontology.ttl"
     g.serialize(destination=output_path, format="turtle")
     st.success(f"Ontology saved to: {output_path}")
+
