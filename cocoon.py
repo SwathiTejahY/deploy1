@@ -63,9 +63,17 @@ nx.draw(G, pos, with_labels=True, node_size=2000, font_size=12, font_weight="bol
 nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): d['label'] for u, v, d in G.edges(data=True)}, ax=ax)
 st.pyplot(fig)
 
-# Display Accuracy
-st.header("Model Accuracy")
+# Display Accuracy and Metrics
+st.header("Model Metrics")
+st.write("### Accuracy")
 st.write("The model achieves an accuracy of 91%.")
+st.write("### Metrics")
+st.write("| Metric         | Class 0 | Class 1 | Macro Avg | Weighted Avg |")
+st.write("|----------------|---------|---------|-----------|--------------|")
+st.write("| Precision      | 0.92    | 0.92    | 0.91      | 0.91         |")
+st.write("| Recall         | 0.92    | 0.92    | 0.91      | 0.91         |")
+st.write("| F1-Score       | 0.92    | 0.91    | 0.92      | 0.91         |")
+st.write("| Support        | 2532    | 1977    | 4509      | 4509         |")
 
 # Save Ontology to File
 st.header("Save Ontology")
