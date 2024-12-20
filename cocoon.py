@@ -1,4 +1,3 @@
-
 import streamlit as st
 from rdflib import Graph, Namespace, RDF, OWL, URIRef
 import pandas as pd
@@ -46,33 +45,53 @@ for s, p, o in g.triples((None, COCOON.exploitedBy, None)):
     results.append((s.split("#")[-1], o.split("#")[-1]))
 
 # Convert to pandas DataFrame
-df = pd.DataFrame(results, columns=["Subject", "Exploited By"])
+df = pd.DataFrame(results, columns=["Vulnerability", "Exploited By"])
 st.write("---")
-st.write("### Query Results")
+st.write("### Vulnerabilities and the Threats Exploiting Them")
 st.dataframe(df)
 
-# Display Model Accuracy and Metrics
-st.write("### Show Model Accuracy")
-st.write("Overall Accuracy: 91%")
+# User Checkbox for Displaying Model Metrics
+if st.checkbox("Show Model Accuracy and Metrics"):
+    # Define the metrics data
+    metrics_data = {
+        "Class": [0, 1],
+        "Precision": [0.92, 0.92],
+        "Recall": [0.92, 0.92],
+        "F1-Score": [0.92, 0.91],
+        "Support": [2532, 1977]
+    }
+    metrics_df = pd.DataFrame(metrics_data)
 
-st.write("### Show Detailed Metrics")
-st.write("#### Detailed Metrics")
-st.table(pd.DataFrame({
-    "Class": [0, 1],
-    "Precision": [0.92, 0.92],
-    "Recall": [0.92, 0.92],
-    "F1-Score": [0.92, 0.91],
-    "Support": [2532, 1977]
-}))
-st.write("#### Averages")
-st.write("Macro Avg: Precision: 0.92, Recall: 0.92, F1-Score: 0.92")
-st.write("Weighted Avg: Precision: 0.92, Recall: 0.92, F1-Score: 0.92")
+    # Calculate Macro and Weighted Averages
+    macro_avg = {
+        "Precision": round(sum(metrics_data["Precision"]) / 2, 2),
+        "Recall": round(sum(metrics_data["Recall"]) / 2, 2),
+        "F1-Score": round(sum(metrics_data["F1-Score"]) / 2, 2)
+    }
+    weighted_avg = {
+        "Precision": round((metrics_data["Precision"][0] * metrics_data["Support"][0] + metrics_data["Precision"][1] * metrics_data["Support"][1]) / sum(metrics_data["Support"]), 2),
+        "Recall": round((metrics_data["Recall"][0] * metrics_data["Support"][0] + metrics_data["Recall"][1] * metrics_data["Support"][1]) / sum(metrics_data["Support"]), 2),
+        "F1-Score": round((metrics_data["F1-Score"][0] * metrics_data["Support"][0] + metrics_data["F1-Score"][1] * metrics_data["Support"][1]) / sum(metrics_data["Support"]), 2)
+    }
+
+    # Display Accuracy
+    accuracy = round((metrics_data["Recall"][0] * metrics_data["Support"][0] + metrics_data["Recall"][1] * metrics_data["Support"][1]) / sum(metrics_data["Support"]), 2)
+    st.write(f"### Overall Accuracy: {accuracy * 100}%")
+
+    # Display Metrics Table
+    st.write("#### Detailed Metrics")
+    st.table(metrics_df)
+
+    # Display Averages
+    st.write("#### Averages")
+    st.write(f"Macro Avg: Precision: {macro_avg['Precision']}, Recall: {macro_avg['Recall']}, F1-Score: {macro_avg['F1-Score']}")
+    st.write(f"Weighted Avg: Precision: {weighted_avg['Precision']}, Recall: {weighted_avg['Recall']}, F1-Score: {weighted_avg['F1-Score']}")
 
 # Visualize Results as a Graph
 st.header("Ontology Graph Visualization")
 G = nx.DiGraph()
 for _, row in df.iterrows():
-    G.add_edge(row['Subject'], row['Exploited By'], label='exploitedBy')
+    G.add_edge(row['Vulnerability'], row['Exploited By'], label='exploitedBy')
 
 # Draw graph
 fig, ax = plt.subplots(figsize=(8, 6))
