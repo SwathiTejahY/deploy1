@@ -28,6 +28,9 @@ g.add((threat, RDF.type, CYBERSEC.Threat))
 g.add((vulnerability, CYBERSEC.exploitedBy, threat))
 g.add((asset, CYBERSEC.exploitedBy, vulnerability))
 
+# Accuracy of the model (example value)
+takeshi_accuracy = 93.2  # Replace with dynamically computed or stored value
+
 # Streamlit UI
 st.title("Takeshi Takahashi Cloud Security Ontology Visualization")
 
@@ -41,6 +44,10 @@ for s, p, o in g.triples((None, CYBERSEC.exploitedBy, None)):
 df = pd.DataFrame(results, columns=["Subject", "Exploited By"])
 st.write("### Query Results")
 st.dataframe(df)
+
+# Display model accuracy
+if st.checkbox("Show Model Accuracy"):
+    st.write(f"Model Accuracy: {takeshi_accuracy}%")
 
 # Visualize the relationships using NetworkX
 G = nx.DiGraph()
