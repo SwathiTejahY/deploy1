@@ -5,7 +5,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # Streamlit App Title
-st.title(" CoCoOn Cloud Security Ontology Model")
+st.title("CoCoOn Cloud Security Ontology Model")
 
 # Initialize the graph and define namespace
 g = Graph()
@@ -38,6 +38,16 @@ g.add((threat1, RDF.type, COCOON.Threat))
 g.add((vuln1, COCOON.mitigatedBy, control1))
 g.add((control1, RDF.type, COCOON.Control))
 
+# Metrics
+metrics = {
+    "Class": [0, 1],
+    "Precision": [0.58, 0.97],
+    "Recall": [1.00, 0.08],
+    "F1-Score": [0.73, 0.14],
+    "Support": [2532, 1977],
+}
+accuracy = 0.595
+
 # Query the Ontology
 st.header("Query Results")
 results = []
@@ -49,6 +59,18 @@ df = pd.DataFrame(results, columns=["Vulnerability", "Exploited By"])
 st.write("---")
 st.write("### Vulnerabilities and the Threats Exploiting Them")
 st.dataframe(df)
+
+# Display Accuracy
+if st.checkbox("Show Model Accuracy"):
+    st.write(f"Overall Accuracy: {accuracy:.3f} ({accuracy * 100:.2f}%)")
+
+# Display Detailed Metrics
+if st.checkbox("Show Detailed Metrics"):
+    metrics_df = pd.DataFrame(metrics)
+    st.write("### Detailed Metrics")
+    st.dataframe(metrics_df)
+    st.write("Macro Avg: Precision: 0.78, Recall: 0.54, F1-Score: 0.44")
+    st.write("Weighted Avg: Precision: 0.75, Recall: 0.59, F1-Score: 0.48")
 
 # Visualize Results as a Graph
 st.header("Ontology Graph Visualization")
@@ -69,5 +91,4 @@ if st.button("Save Ontology as Turtle"):
     output_path = "cocoon_cloud_security_ontology.ttl"
     g.serialize(destination=output_path, format="turtle")
     st.success(f"Ontology saved to: {output_path}")
-
 
