@@ -1,0 +1,9 @@
+google
+matplotlib
+numpy
+pandas
+seaborn
+sklearn
+tensorflow
+warnings
+streamlit
