@@ -1,6 +1,10 @@
-rdflib
-pandas
-networkx
+google
 matplotlib
+numpy
+pandas
+scikit-learn
+seaborn
+sklearn
 streamlit
-
+tensorflow
+warnings
